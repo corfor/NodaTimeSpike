@@ -1,8 +1,10 @@
 ﻿using System;
 using FluentAssertions;
+using GeoTimeZone;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NodaTime;
 using NodaTime.Text;
+using TimeZoneNames;
 
 namespace NodaTimeSpike
 {
@@ -40,13 +42,11 @@ namespace NodaTimeSpike
         [TestMethod]
         public void KnoxIndependanceDay()
         {
-            const string dateTime = "2017-07-04 20:30:40";
-            var timeZone = GeoTimeZone.TimeZoneLookup.GetTimeZone(41.285433, -86.626029).Result;
-            var d = DateTime.Parse(dateTime);
+            var geoPoint = new GeoPoint(41.285433, -86.626029);
+            var d = DateTime.Parse("2017-07-04 20:30:40");
 
-            var ldt = new LocalDateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, d.Second);
-            var zdt = ldt.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
-            var date = zdt.ToDateTimeOffset();
+            var date = geoPoint.GetLocalDateTimeOffset(d);
+
             date.ShouldBeEquivalentTo(new DateTimeOffset(2017, 07, 04, 20, 30, 40, TimeSpan.FromHours(-5)));
             Console.WriteLine(date.ToString("s"));
         }
@@ -55,9 +55,9 @@ namespace NodaTimeSpike
         public void KnoxChristmas()
         {
             const string dateTime = "2017-12-25 20:30:40";
-            var timeZone = GeoTimeZone.TimeZoneLookup.GetTimeZone(41.285433, -86.626029).Result;
+            var timeZone = TimeZoneLookup.GetTimeZone(41.285433, -86.626029).Result;
             timeZone.Should().Be("America/Indiana/Knox");
-            var abbreviation = TimeZoneNames.TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
+            var abbreviation = TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
             abbreviation.Should().Be("CT");
 
             var pattern = LocalDateTimePattern.CreateWithInvariantCulture("yyyy-MM-dd HH:mm:ss");
@@ -72,9 +72,9 @@ namespace NodaTimeSpike
         public void FortWayneIndependanceDay()
         {
             const string dateTime = "2017-07-04 20:30:40";
-            var timeZone = GeoTimeZone.TimeZoneLookup.GetTimeZone(40.977506, -85.196059).Result;
+            var timeZone = TimeZoneLookup.GetTimeZone(40.977506, -85.196059).Result;
             var d = DateTime.Parse(dateTime);
-            var abbreviation = TimeZoneNames.TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
+            var abbreviation = TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
             abbreviation.Should().Be("ET");
 
             var ldt = new LocalDateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, d.Second);
@@ -88,9 +88,9 @@ namespace NodaTimeSpike
         public void FortWayneChristmas()
         {
             const string dateTime = "2017-12-25 20:30:40";
-            var timeZone = GeoTimeZone.TimeZoneLookup.GetTimeZone(40.977506, -85.196059).Result;
+            var timeZone = TimeZoneLookup.GetTimeZone(40.977506, -85.196059).Result;
             timeZone.Should().Be("America/Indiana/Indianapolis");
-            var abbreviation = TimeZoneNames.TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
+            var abbreviation = TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
             abbreviation.Should().Be("ET");
 
             var pattern = LocalDateTimePattern.CreateWithInvariantCulture("yyyy-MM-dd HH:mm:ss");
@@ -105,9 +105,9 @@ namespace NodaTimeSpike
         public void TucsonIndependanceDay()
         {
             const string dateTime = "2017-07-04 20:30:40";
-            var timeZone = GeoTimeZone.TimeZoneLookup.GetTimeZone(32.114510, -110.939259).Result;
+            var timeZone = TimeZoneLookup.GetTimeZone(32.114510, -110.939259).Result;
             var d = DateTime.Parse(dateTime);
-            var abbreviation = TimeZoneNames.TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
+            var abbreviation = TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
             abbreviation.Should().Be("MT");
 
             var ldt = new LocalDateTime(d.Year, d.Month, d.Day, d.Hour, d.Minute, d.Second);
@@ -123,9 +123,9 @@ namespace NodaTimeSpike
         public void TucsonChristmas()
         {
             const string dateTime = "2017-12-25 20:30:40";
-            var timeZone = GeoTimeZone.TimeZoneLookup.GetTimeZone(32.114510, -110.939259).Result;
+            var timeZone = TimeZoneLookup.GetTimeZone(32.114510, -110.939259).Result;
             timeZone.Should().Be("America/Phoenix");
-            var abbreviation = TimeZoneNames.TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
+            var abbreviation = TZNames.GetAbbreviationsForTimeZone(timeZone, "en-US").Generic;
             abbreviation.Should().Be("MT");
 
             var pattern = LocalDateTimePattern.CreateWithInvariantCulture("yyyy-MM-dd HH:mm:ss");
@@ -133,7 +133,7 @@ namespace NodaTimeSpike
             var zdt = ldt.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
             var date = zdt.ToDateTimeOffset();
             date.ShouldBeEquivalentTo(new DateTimeOffset(2017, 12, 25, 20, 30, 40, TimeSpan.FromHours(-7)));
-            var s = date.ToString("yyyy-MM-ddTHH\\:mm\\:ss.zzz");
+            var s = date.ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
             Console.WriteLine(s);
             s.Should().Be("2017-12-25T20:30:40-07:00");
         }
