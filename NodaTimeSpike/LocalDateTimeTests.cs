@@ -8,7 +8,7 @@ namespace NodaTimeSpike
     public class GeoPointHelperTests
     {
         /// <summary>
-        /// First call is slow, so get that out of the way so timings are more meaningful.
+        ///     First call is slow, so get that out of the way so timings are more meaningful.
         /// </summary>
         /// <param name="testContext"></param>
         [ClassInitialize]
