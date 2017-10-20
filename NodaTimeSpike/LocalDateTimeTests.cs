@@ -153,5 +153,54 @@ namespace NodaTimeSpike
             Console.WriteLine(s);
             s.Should().Be("2017-12-25T20:30:40-07:00");
         }
+
+        [TestMethod]
+        public void LosAngelesChristmas()
+        {
+            var dateTime = DateTime.Parse("2017-12-25 20:30:40");
+            var geoPoint = new GeoPoint(33.941571, -118.408551);
+            var date = geoPoint.GetLocalDateTimeOffset(dateTime);
+
+            var label = geoPoint.LookupTimeZoneLabel();
+            label.Should().Be("PT");
+
+            date.ShouldBeEquivalentTo(new DateTimeOffset(2017, 12, 25, 20, 30, 40, TimeSpan.FromHours(-8)));
+            var s = date.ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
+            Console.WriteLine(s);
+            s.Should().Be("2017-12-25T20:30:40-08:00");
+        }
+
+        [TestMethod]
+        public void AnchorageChristmas()
+        {
+            var dateTime = DateTime.Parse("2017-12-25 20:30:40");
+            var geoPoint = new GeoPoint(61.175840, -149.990036);
+            var date = geoPoint.GetLocalDateTimeOffset(dateTime);
+
+            var label = geoPoint.LookupTimeZoneLabel();
+            label.Should().Be("AKT");
+
+            date.ShouldBeEquivalentTo(new DateTimeOffset(2017, 12, 25, 20, 30, 40, TimeSpan.FromHours(-9)));
+            var s = date.ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
+            Console.WriteLine(s);
+            s.Should().Be("2017-12-25T20:30:40-09:00");
+        }
+
+        [TestMethod]
+        public void HonoluluChristmas()
+        {
+            var dateTime = DateTime.Parse("2017-12-25 20:30:40");
+            var geoPoint = new GeoPoint(21.324553, -157.924033);
+            var date = geoPoint.GetLocalDateTimeOffset(dateTime);
+
+            var label = geoPoint.LookupTimeZoneLabel();
+            label.Should().Be("HST");
+
+            date.ShouldBeEquivalentTo(new DateTimeOffset(2017, 12, 25, 20, 30, 40, TimeSpan.FromHours(-10)));
+            var s = date.ToString("yyyy-MM-ddTHH\\:mm\\:sszzz");
+            Console.WriteLine(s);
+            s.Should().Be("2017-12-25T20:30:40-10:00");
+        }
+
     }
 }
